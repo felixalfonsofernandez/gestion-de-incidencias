@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tareas</title>
+    <style>
+        /* Estilos básicos */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .task-section {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 30%;
+            background-color: #f9f9f9;
+        }
+        .task-section h2 {
+            text-align: center;
+            color: #333;
+        }
+        .task-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: right; margin: 20px;">
+        <form method="POST" action="/logout">
+            <button type="submit">Desloguearse</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <!-- Tareas no realizadas -->
+        <div class="task-section">
+            <h2>Tareas no realizadas</h2>
+            <!-- Bucle a través de tareas no realizadas -->
+            {% for tarea in tareas_no_realizadas %}
+            <div class="task-card">
+                <a href="{{ url_for('detalle_tarea', tarea_id=tarea.Id) }}" style="text-decoration: none; color: inherit;">
+                <h3>Creador: {{ tarea.Creador }}</h3>
+                <p>{{ tarea.Contenido }}</p>
+                <!-- Puedes agregar más detalles aquí si lo deseas -->
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Tareas en progreso -->
+        <div class="task-section">
+            <h2>Tareas en progreso</h2>
+            <!-- Bucle a través de tareas en progreso -->
+            {% for tarea in tareas_en_progreso %}
+            <div class="task-card">
+                <a href="{{ url_for('detalle_tarea', tarea_id=tarea.Id) }}" style="text-decoration: none; color: inherit;">
+                <h3>Creador: {{ tarea.Creador }}</h3>
+                <p>{{ tarea.Contenido }}</p>
+                <!-- Puedes agregar más detalles aquí si lo deseas -->
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Tareas realizadas -->
+        <div class="task-section">
+            <h2>Tareas realizadas</h2>
+            <!-- Bucle a través de tareas realizadas -->
+            {% for tarea in tareas_realizadas %}
+            <div class="task-card">
+                <a href="{{ url_for('detalle_tarea', tarea_id=tarea.Id) }}" style="text-decoration: none; color: inherit;">
+                <h3>{{ tarea.Creador }}</h3>
+                <p>{{ tarea.Contenido }}</p>
+                <!-- Puedes agregar más detalles aquí si lo deseas -->
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>

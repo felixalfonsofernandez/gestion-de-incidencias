@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bienvenida</title>
+    <!-- Incluyendo Bootstrap CSS desde CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Incluyendo estilos opcionales -->
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            background-image: url('{{ url_for('static', filename='imagenes/inicio.png') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Evita el desplazamiento de la imagen de fondo */
+        }
+        .overlay {
+            background: rgba(0, 0, 0, 0.5); /* Añade transparencia al fondo */
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .btn-custom {
+            background-color: cornflowerblue;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 30px;
+            font-size: 20px;
+            color: white;
+            transition: all 0.3s;
+        }
+        .btn-custom:hover {
+            background-color: blue;
+            color: white;
+            text-decoration: none;
+        }
+        h1 {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <h1 class="display-4 text-center mb-4">Farmaceutica Synlab, cuenta con nosotros</h1>
+        <div>
+            <a href="/inicio" class="btn-custom">Ir al Inicio</a>
+        </div>
+    </div>
+    <!-- Incluyendo Bootstrap JS y dependencias desde CDN (Opcional para algunos componentes de Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

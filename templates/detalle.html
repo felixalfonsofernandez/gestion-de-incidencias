@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de la Tarea</title>
+    <!-- ... (tus estilos y otros elementos de head) ... -->
+</head>
+<body>
+
+<div style="margin: 20px;">
+    <h2>Detalle de la Tarea</h2>
+    <p><strong>Creador:</strong> {{ tarea.Creador }}</p>
+    <p><strong>Contenido:</strong> {{ tarea.Contenido }}</p>
+    <p><strong>Estado:</strong> {{ 'Realizada' if tarea.Realizado else 'En Progreso' if tarea.EnProgreso else 'No Realizada' }}</p>
+    <p><strong>Fecha de Creación:</strong> {{ tarea.creacion.strftime('%d/%m/%Y, %H:%M:%S') }}</p>
+    <p><strong>Fecha de Término:</strong> {{ tarea.fecha_termino.strftime('%d/%m/%Y, %H:%M:%S') if tarea.fecha_termino else 'No especificado' }}</p>
+    <p><strong>Usuario Designado:</strong> {{ tarea.usuario_designado.Nombres if tarea.usuario_designado else 'No asignado' }}</p>
+    <p><strong>Dificultad:</strong> {{ tarea.Dificultad }}</p>
+</div>
+
+</body>
+</html>

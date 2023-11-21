@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<title>Tabla de Datos</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table, th, td {
+    border: 1px solid #dddddd;
+  }
+  th, td {
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  .button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+  }
+  .pagination > li {
+    display: inline;
+  }
+  .pagination > li > a,
+  .pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+  .pagination > li:first-child > a,
+  .pagination > li:first-child > span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+  .pagination > li:last-child > a,
+  .pagination > li:last-child > span {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+  .pagination > li > a:hover,
+  .pagination > li > span:hover,
+  .pagination > li > a:focus,
+  .pagination > li > span:focus {
+    color: #23527c;
+    background-color: #eee;
+    border-color: #ddd;
+  }
+  .pagination > .disabled > span,
+  .pagination > .disabled > span:hover,
+  .pagination > .disabled > span:focus,
+  .pagination > .disabled > a,
+  .pagination > .disabled > a:hover,
+  .pagination > .disabled > a:focus {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+  }
+  .pagination > .active > a,
+  .pagination > .active > a:hover,
+  .pagination > .active > a:focus,
+  .pagination > .active > span,
+  .pagination > .active > span:hover,
+  .pagination > .active > span:focus {
+    z-index: 2;
+    color: #fff;
+    cursor: default;
+    background-color: #337ab7;
+    border-color: #337ab7;
+  }
+
+  /* Estilo del modal */
+.modal {
+  display: none; /* Ocultar el modal por defecto */
+  position: fixed; /* Mantener en su lugar */
+  z-index: 1; /* Situar sobre otros elementos */
+  left: 0;
+  top: 0;
+  width: 100%; /* Anchura completa */
+  height: 100%; /* Altura completa */
+  overflow: auto; /* Habilitar desplazamiento si es necesario */
+  background-color: rgb(0,0,0); /* Color de fondo con opacidad */
+  background-color: rgba(0,0,0,0.4); /* También con opacidad */
+  padding-top: 60px;
+}
+
+/* Estilo del contenido del modal */
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto; /* 5% desde la parte superior y centrado */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Podrías querer un ancho más estrecho para móviles */
+}
+
+/* El botón cerrar (x) */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+
+<h2>Tabla de Registros Synlab</h2>
+
+<button class="button" id="openModal">Crear Nuevo Registro</button>
+
+<div style="text-align: right; margin: 20px;">
+    <form method="POST" action="/logout">
+        <button type="submit">Desloguearse</button>
+    </form>
+  </div>
+
+<!-- El Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Contenido del modal -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 class="text-center">Crear Nuevo Registro</h2>
+    <!-- Aquí puedes añadir el formulario o el contenido que deseas mostrar -->
+    <br><br>
+    <form id="ticketForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Tipo de Ticket" name="tipo_ticket">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Área" name="area">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="number" class="form-control" placeholder="ID del Solicitante" name="id_solicitante">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="email" class="form-control" placeholder="Correo del Solicitante" name="mail_solicitante">
+          </div>
+        </div>
+      
+        <!-- Continúa con el resto de los campos -->
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Solicitante" name="solicitante">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Cargo" name="cargo">
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="number" class="form-control" placeholder="Centro de Costos" name="centro_de_costos">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Área" name="area1">
+          </div>
+        </div>
+      
+        <!-- Asegúrate de seguir este patrón para agregar el resto de los campos -->
+        <!-- ...otros campos... -->
+      
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Gerencia" name="gerencia">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Local" name="local">
+          </div>
+        </div>
+      
+        <!-- ...otros campos... -->
+      
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Título" name="titulo">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Categoría" name="categoria">
+          </div>
+        </div>
+      
+        <!-- ...otros campos... -->
+      
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Sub-Categoría" name="sub_categoria">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Aplicación/Servicio" name="aplicacion_servicio">
+          </div>
+        </div>
+      
+        <!-- ...otros campos... -->
+      
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <select class="form-control" name="prioridad">
+              <option value="Baja">Baja</option>
+              <option value="Media">Media</option>
+              <option value="Alta">Alta</option>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <input type="datetime-local" class="form-control" placeholder="Fecha de Registro" name="fecha_registro">
+          </div>
+        </div>
+      
+        <!-- ...otros campos... -->
+      
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="datetime-local" class="form-control" placeholder="Fecha de Estado" name="fecha_estado">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="number" class="form-control" placeholder="Días de Espera" name="dias_espera">
+          </div>
+        </div>
+      
+        <!-- ...otros campos... -->
+      
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="number" class="form-control" placeholder="Días Laborales" name="dias_laborales">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Estado" name="estado">
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="number" class="form-control" placeholder="ID del Ejecutor" name="id_ejecutor">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Cuenta del Ejecutor" name="cta_ejecutor">
+          </div>
+        </div>
+      
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <input type="text" class="form-control" placeholder="Ejecutor" name="ejecutor">
+          </div>
+          <div class="form-group col-md-6">
+            
+          </div>
+        </div>
+      
+        <div class="form-row">
+            <div class="col-md-6">
+                <input type="submit" class="btn btn-primary btn-block" value="Guardar">
+            </div>
+        </form>
+            <div class="col-md-6">
+                <button type="button" id="btnPredecirPrioridad" class="btn btn-info btn-block">Predecir Prioridad</button>
+            </div>
+        </div>
+  </div>
+
+</div>
+
+
+<br><br>
+<table>
+    <tr>
+        <th>Ticket</th>
+        <th>Tipo Ticket</th>
+        <th>Area</th>
+        <th>Id Solicitante</th>
+        <th>Mail Solicitante</th>
+        <th>Solicitante</th>
+        <th>Cargo</th>
+        <th>Centro de costos</th>
+        <th>Area1</th>
+        <th>Gerencia</th>
+        <th>Local</th>
+        <th>Titulo</th>
+        <th>Categoría</th>
+        <th>Sub-Categoría</th>
+        <th>Aplicacion Servicio</th>
+        <th>Prioridad</th>
+        <th>Fecha Registro</th>
+        <th>Fecha Estado</th>
+        <th>Dias Espera</th>
+        <th>Dias Laborales</th>
+        <th>Estado</th>
+        <th>Id Ejecutor</th>
+        <th>Cta Ejecutor</th>
+        <th>Ejecutor</th>
+    </tr>
+  <!-- Aquí se insertarían los datos del servidor usando, por ejemplo, Flask o JavaScript -->
+  {% for dato in datos_paginados %}
+    <tr>
+        <td>{{ dato.Ticket|int }}</td>
+        <td>{{ dato.Tipo_Ticket|default('', true) }}</td>
+        <td>{{ dato.Area|default('', true) }}</td>
+        <td>{{ dato.Id_Solicitante|default('', true) }}</td>
+        <td>{{ dato.Mail_Solicitante|default('', true) }}</td>
+        <td>{{ dato.Solicitante|default('', true) }}</td>
+        <td>{{ dato.Cargo|default('', true) }}</td>
+        <td>{{ dato.Centro_de_costos|default('', true) }}</td>
+        <td>{{ dato.Area1|default('', true) }}</td>
+        <td>{{ dato.Gerencia|default('', true) }}</td>
+        <td>{{ dato.Local|default('', true) }}</td>
+        <td>{{ dato.Titulo|default('', true) }}</td>
+        <td>{{ dato.Categoría|default('', true) }}</td>
+        <td>{{ dato.Sub_Categoria|default('', true) }}</td>
+        <td>{{ dato.Aplicacion_Servicio|default('', true) }}</td>
+        <td>{{ dato.Prioridad|default('', true) }}</td>
+        <td>{{ dato.Fecha_Registro|default('', true) }}</td>
+        <td>{{ dato.Fecha_Estado|default('', true) }}</td>
+        <td>{{ dato.Dias_Espera|default('', true) }}</td>
+        <td>{{ dato.Dias_Laborales|default('', true) }}</td>
+        <td>{{ dato.Estado|default('', true) }}</td>
+        <td>{{ dato.Id_Ejecutor|default('', true) }}</td>
+        <td>{{ dato.Cta_Ejecutor|default('', true) }}</td>
+        <td>{{ dato.Ejecutor|default('', true) }}</td>
+    </tr>
+    {% endfor %}
+  <!-- Repite la fila anterior para cada registro que quieras mostrar -->
+</table>
+
+<!-- Aquí es donde agregas los controles de paginación -->
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+      <!-- Botón para la primera página -->
+      <li class="page-item {% if pagina <= 1 %}disabled{% endif %}">
+        <a class="page-link" href="{{ url_for('datos', pagina=1) }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;&laquo;</span>
+        </a>
+      </li>
+      <!-- Botón para la página anterior -->
+      <li class="page-item {% if pagina <= 1 %}disabled{% endif %}">
+        <a class="page-link" href="{{ url_for('datos', pagina=pagina-1) }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <!-- Puedes agregar aquí números de página si lo deseas -->
+      <!-- Botón para la página siguiente -->
+      <li class="page-item {% if pagina >= total_paginas %}disabled{% endif %}">
+        <a class="page-link" href="{{ url_for('datos', pagina=pagina+1) }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      <!-- Botón para la última página -->
+      <li class="page-item {% if pagina >= total_paginas %}disabled{% endif %}">
+        <a class="page-link" href="{{ url_for('datos', pagina=total_paginas) }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  
+
+  <script>
+    // Obtiene el modal
+    var modal = document.getElementById('myModal');
+    
+    // Obtiene el botón que abre el modal
+    var btn = document.getElementById('openModal');
+    
+    // Obtiene el elemento <span> que cierra el modal
+    var span = document.getElementsByClassName('close')[0];
+    
+    // Cuando el usuario hace clic en el botón, abre el modal 
+    btn.onclick = function() {
+        modal.style.display = 'block';
+    }
+    
+    // Cuando el usuario hace clic en <span> (x), cierra el modal
+    span.onclick = function() {
+        modal.style.display = 'none';
+    }
+    
+    // Cuando el usuario hace clic en cualquier lugar fuera del modal, cierra el modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function predecirPrioridad() {
+        // Captura los valores del formulario que necesitas para crear el texto combinado
+        var titulo = document.getElementsByName('titulo')[0].value;
+        var categoria = document.getElementsByName('categoria')[0].value;
+        var sub_categoria = document.getElementsByName('sub_categoria')[0].value;
+        var aplicacion_servicio = document.getElementsByName('aplicacion_servicio')[0].value;
+
+        // Combinar los valores para crear el texto
+        var textoCombinado = titulo + ' ' + categoria + ' ' + sub_categoria + ' ' + aplicacion_servicio;
+
+        // Crear el objeto que se enviará al servidor
+        var datosParaEnviar = {
+            text: textoCombinado
+        };
+
+        // Realizar la solicitud al endpoint de predicción de prioridad
+        fetch('/api/predecir-prioridad', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datosParaEnviar)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Obtener la prioridad predicha de la respuesta
+            var prioridadPredicha = data.prioridad;
+            
+            // Convertir la prioridad numérica a texto si es necesario
+            var prioridadTexto;
+            switch(prioridadPredicha) {
+                case 1:
+                    prioridadTexto = 'Baja';
+                    break;
+                case 2:
+                    prioridadTexto = 'Media';
+                    break;
+                case 3:
+                    prioridadTexto = 'Alta';
+                    break;
+                default:
+                    prioridadTexto = 'Desconocida'; // O manejar de acuerdo a tus necesidades
+            }
+
+            // Establecer la prioridad en el campo select del formulario
+            var selectPrioridad = document.getElementsByName('prioridad')[0];
+            selectPrioridad.value = prioridadTexto;
+        })
+        .catch(error => {
+            console.error('Error al predecir la prioridad:', error);
+        });
+    }
+
+    // Añadir el evento al botón
+    document.getElementById('btnPredecirPrioridad').addEventListener('click', predecirPrioridad);
+
+    document.getElementById("ticketForm").onsubmit = function(event) {
+        event.preventDefault();
+        
+        var formData = new FormData(document.getElementById("ticketForm"));
+        
+        fetch('/guardar-ticket', { // Asegúrate de que esta ruta esté definida en tu servidor Flask
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Ticket guardado con éxito!');
+            // Aquí podrías redirigir al usuario o actualizar la página
+        })
+        .catch(error => {
+            console.error('Error al guardar el ticket:', error);
+        });
+    };
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  </body>
+  </html>

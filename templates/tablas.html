@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabla de Datos</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table, th, td {
+    border: 1px solid #dddddd;
+  }
+  th, td {
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  .button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h2>Tabla de Registros Synlab</h2>
+<table>
+    <tr>
+        <th>Ticket</th>
+        <th>Tipo Ticket</th>
+        <th>Area</th>
+        <th>Id Solicitante</th>
+        <th>Mail Solicitante</th>
+        <th>Solicitante</th>
+        <th>Cargo</th>
+        <th>Centro de costos</th>
+        <th>Area1</th>
+        <th>Gerencia</th>
+        <th>Local</th>
+        <th>Titulo</th>
+        <th>Categoría</th>
+        <th>Sub-Categoría</th>
+        <th>Aplicacion Servicio</th>
+        <th>Prioridad</th>
+        <th>Fecha Registro</th>
+        <th>Fecha Estado</th>
+        <th>Dias Espera</th>
+        <th>Dias Laborales</th>
+        <th>Estado</th>
+        <th>Id Ejecutor</th>
+        <th>Cta Ejecutor</th>
+        <th>Ejecutor</th>
+    </tr>
+  <!-- Aquí se insertarían los datos del servidor usando, por ejemplo, Flask o JavaScript -->
+  {% for dato in datos_paginados %}
+    <tr>
+        <td>{{ dato.Ticket|int }}</td>
+        <td>{{ dato.Tipo_Ticket|default('', true) }}</td>
+        <td>{{ dato.Area|default('', true) }}</td>
+        <td>{{ dato.Id_Solicitante|default('', true) }}</td>
+        <td>{{ dato.Mail_Solicitante|default('', true) }}</td>
+        <td>{{ dato.Solicitante|default('', true) }}</td>
+        <td>{{ dato.Cargo|default('', true) }}</td>
+        <td>{{ dato.Centro_de_costos|default('', true) }}</td>
+        <td>{{ dato.Area1|default('', true) }}</td>
+        <td>{{ dato.Gerencia|default('', true) }}</td>
+        <td>{{ dato.Local|default('', true) }}</td>
+        <td>{{ dato.Titulo|default('', true) }}</td>
+        <td>{{ dato.Categoría|default('', true) }}</td>
+        <td>{{ dato.Sub_Categoria|default('', true) }}</td>
+        <td>{{ dato.Aplicacion_Servicio|default('', true) }}</td>
+        <td>{{ dato.Prioridad|default('', true) }}</td>
+        <td>{{ dato.Fecha_Registro|default('', true) }}</td>
+        <td>{{ dato.Fecha_Estado|default('', true) }}</td>
+        <td>{{ dato.Dias_Espera|default('', true) }}</td>
+        <td>{{ dato.Dias_Laborales|default('', true) }}</td>
+        <td>{{ dato.Estado|default('', true) }}</td>
+        <td>{{ dato.Id_Ejecutor|default('', true) }}</td>
+        <td>{{ dato.Cta_Ejecutor|default('', true) }}</td>
+        <td>{{ dato.Ejecutor|default('', true) }}</td>
+    </tr>
+    {% endfor %}
+  <!-- Repite la fila anterior para cada registro que quieras mostrar -->
+</table>
+
+<button class="button">Crear Nuevo Registro</button>
+  
+</body>
+</html>
